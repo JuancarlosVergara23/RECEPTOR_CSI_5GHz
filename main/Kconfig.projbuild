@@ -1,0 +1,46 @@
+menu "CSI Router Config"
+
+    config CSI_WIFI_SSID
+        string "Wi-Fi SSID (nombre de la red 5 GHz)"
+        default "mi_red_wifi"
+        help
+            Nombre (SSID) de la red del router. El ESP32-C5 se conecta solo en 5 GHz.
+
+    config CSI_WIFI_PASSWORD
+        string "Wi-Fi password"
+        default "mi_password"
+        help
+            Contraseña de la red. Dejar vacío si la red es abierta.
+
+    config CSI_PING_HZ
+        int "Frecuencia de muestreo CSI (pings por segundo al router)"
+        range 1 100
+        default 100
+        help
+            El firmware hace ping al router (gateway) a esta frecuencia. Cada respuesta
+            del router genera un paquete CSI, así que esto fija aprox. las muestras/s.
+
+    config CSI_5G_11AC
+        bool "Habilitar 802.11ac (VHT) en 5 GHz"
+        default n
+        help
+            n: el STA anuncia solo 11a/11n (el router responde en HT, como en 2.4 GHz).
+            y: añade 11ac; el router puede responder con tramas VHT (se activa acquire_csi_vht).
+
+    config CSI_FORCE_LLTF
+        bool "Forzar CSI de L-LTF (alternativa si aparece el bug esp-idf#18493)"
+        default n
+        help
+            Activa acquire_csi_force_lltf. El driver entrega los datos empaquetados en
+            12 bits (2 bytes por valor); el firmware los desempaqueta y sigue imprimiendo
+            enteros [Im,Re], así que csi_tool.py no necesita cambios.
+
+    config CSI_BUGCHECK_WINDOW
+        int "Muestras por ventana del detector de buffer constante"
+        range 10 1000
+        default 100
+        help
+            Cada N muestras se imprime cuántas tenían el buffer CSI idéntico a la
+            anterior (síntoma del bug esp-idf#18493).
+
+endmenu

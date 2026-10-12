@@ -1,0 +1,9 @@
+# Valores base del proyecto (se aplican solo si se borra/regenera sdkconfig)
+CONFIG_IDF_TARGET="esp32c5"
+
+# Habilita la captura de CSI en el driver Wi-Fi (obligatorio)
+CONFIG_ESP_WIFI_CSI_ENABLED=y
+
+# Consola por el USB nativo (USB-Serial-JTAG, COM3): no está limitada a 115200 baudios
+# como la UART, necesario porque cada paquete CSI es una línea de ~0.5 KB (x100/s)
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
